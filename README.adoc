@@ -1,0 +1,93 @@
+= CARD COST API REST Application for Etraveli Group
+
+Spring Boot based application for managing Clearing Costs by countries with CRUD REST operations and calculate clearing cost for particular card. Remote call considered as expensive operation that's why implementation making saves of result from remote service. However here could be other problem that after some time lookup becomes stale, that is why implemented Expiration Policy checker that considers BIN lookup outdated after 30 days and this period is configurable through application properties
+
+Created on environment: Java 21.0.4, Maven 3.9.6, MySql 9, Docker 27.2.0
+
+
+Following steps for setup and work check:
+Change directory to `card-cost-api/docker-build/mysql` and run the following command to create the container image of the database:
+
+[source]
+----
+docker build -t mysql:card-cost-ivanov .
+----
+
+Run the following to start the MySQL container:
+
+[source]
+----
+docker run --name mysql-card-cost-ivanov -d -p 3306:3306 mysql:card-cost-ivanov
+----
+
+
+Change directory to `card-cost-api/` and issue the following command to immediately run the service:
+
+[source]
+----
+mvn clean install spring-boot:run
+----
+
+Another way to run REST service is to change directory to `card-cost-api/` and  run the following command to create the executable jar of the REST service:
+
+[source]
+----
+mvn clean package
+----
+
+Then run it with:
+
+[source]
+----
+java -jar target/card-cost-api-0.0.1-SNAPSHOT.jar
+----
+
+Another way to run REST service is to change directory to `card-cost-api/` and immediately run the service with command:
+
+[source]
+----
+mvn clean install spring-boot:run
+----
+
+Service properties for connections, etc. are in the file  `application.yml`
+
+Usage examples of service:
+
+Get list of all countries clearing costs:
+[source]
+----
+curl localhost:8080/ -H "Accept: application/json" -v -X GET
+----
+
+Get concrete country cost by path variable  (US):
+[source]
+----
+curl localhost:8080/US -H "Accept: application/json" -v -X GET
+----
+
+Create new country clearing cost:
+[source]
+----
+curl localhost:8080/ -H "Content-Type: application/json" -H "Accept: application/json" -X POST -v -d '{"country": "GE", "cost": "8.00"}'
+
+----
+
+Update country clearing cost by path variable (GR):
+[source]
+----
+curl localhost:8080/GR -H "Content-Type: application/json" -H "Accept: application/json" -X PUT -v -d '{"country": "GR", "cost": "11.00"}'
+----
+
+Delete country clearing cost by path variable (GE):
+[source]
+----
+curl localhost:8080/GE -H "Accept: application/json" -v -X DELETE
+----
+
+Receive specific card clearing cost:
+[source]
+----
+curl localhost:8080/payment-cards-cost -H "Content-Type: application/json" -H "Accept: application/json" -v -X POST -d '{"card_number": 4571736098747}'
+----
+
+

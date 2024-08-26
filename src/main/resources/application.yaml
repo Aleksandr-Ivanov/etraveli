@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: card-cost-api
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/card_clearing_db
+    username: card-clearing
+    password: card-clearing
+    hikari:
+      maximum-pool-size: 25
+  jpa:
+    generate-ddl: false
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 10
+          fetch_size: 30
+        max_fetch_depth: 3
+        show-sql: true
+        format-sql: false
+        use_sql_comments: false
+        hbm2ddl:
+          auto: none
+
+logging:
+  pattern:
+    console: "%-5level: %class{0} - %msg%n"
+  level:
+    root: INFO
+    org.springframework.boot: INFO
+    com.etraveli.cardcost: DEBUG
+
+binlist:
+  #include closing slash, bin num will be appended directly to the value
+  url: https://lookup.binlist.net/
+  httpHeaderAcceptVersionNumber: 3
+  lookup:
+    expirationDays: 30
+    countryCodeJsonPath: /country/alpha2
+
+cardCostRequest:
+  cardNumberJsonPath: /card_number
