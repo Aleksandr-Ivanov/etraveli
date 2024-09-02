@@ -42,13 +42,6 @@ Then run it with:
 java -jar target/card-cost-api-0.0.1-SNAPSHOT.jar
 ----
 
-Another way to run REST service is to change directory to `card-cost-api/` and immediately run the service with command:
-
-[source]
-----
-mvn clean install spring-boot:run
-----
-
 Service properties for connections, etc. are in the file  `application.yml`
 
 Usage examples of service:
